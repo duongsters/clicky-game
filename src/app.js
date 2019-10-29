@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import Gameboard from './components/gameboard/gameboard';
 import Footer from './components/footer/footer';
 import Header from './components/header/header';
