@@ -147,12 +147,12 @@ export default class Gameboard extends Component {
                     To play, simply click on a NBA card. You gain 1 score per card clicked, but be careful!
                     If you click on the same NBA Player card twice, the game will restart and your score will go back to 0! Enjoy! and
                 </h3>
-
+                {/* loads user score to scoreboard area */}
                 <Scoreboard
                     score={this.state.user.score} />
 
                 <CardList
-                    //characters={this.state.characters}  
+                //renders the NBA player cards clicked by the player/user within the CardList DOM of the page
                     players={this.state.players}
                     handleCardClick={this.handleCardClick} />
             </div>
