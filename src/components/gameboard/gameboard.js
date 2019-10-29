@@ -84,13 +84,13 @@ function shuffleCard(arrGameboard) {
     arrGameboard.map(i => {
         Math.random()
     })
-    .sort((i, j) => {
-        return i[0] - j[0];
-    })
+        .sort((i, j) => {
+            return i[0] - j[0];
+        })
 
-    .map(i => {
-        return a[i];
-    });
+        .map(i => {
+            return a[i];
+        });
 }
 
 
@@ -102,4 +102,43 @@ export default class Gameboard extends Component {
         },
         players: shuffleCard(nbaPlayers)
     };
+
+
+//run this when NBA player card is clicked....
+handleCardClick = (index) => {
+    if (!this.state.players[index].clicked) {
+        this.setState({
+            // current = index of current element in this.state.players
+            //then the user repsonse to the clicked NBA player card is sets the boolean value of 'clicked' to true for the player/user
+            //and also shuffles the NBA Player cards
+            players: shuffleCard(this.state.players.map((player, current) => { 
+                return ((current === index) ? (
+                    { name, img, clicked } = { clicked: true }) : player)
+            }
+            )
+            ),
+            user: {
+                //and increment the user score
+                score: this.state.user.score + 1
+            }
+        }); 
+    } else {
+        //else, shuffles the NBA Player cards and a returns the player card to false for the key 'clicked'
+        this.setState({
+            players: shuffleCard(this.state.players.map(player => {
+                return {
+                    clicked: false
+                }
+            })
+            ),
+            //and also restarts the user score back to 0
+            user: {
+                score: 0
+            }
+        });
+    }
+
+}
+
+
 }
