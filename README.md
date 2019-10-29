@@ -1,68 +1,111 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Clicky-Game: NBA Edition
 
-## Available Scripts
 
-In the project directory, you can run:
+## Summary:
+'clicky-game:NBA Edition' is an application, built with React, that would scrape all articles from Hacker News so that I, and other avid tech junkies, could stay connected to newest news within the computer hacking industry! By using the technologies of: mongoose, MongoDB, Node.js, and various other technologies to scrape Hacker News' articles via https://news.ycombinator.com, store the articles through a MongoDB database, and append the stored information values to 'news-to-scrape' where you, the user are just one click away in getting all tech hacking related news!
 
-### `npm start`
+## Demo link:
+https://salty-taiga-01960.herokuapp.com/
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## File Structure:
+![](./public/assets/images/Screenshot.png)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Getting Started:
+The simpliest way in seeing a demo of 'news-to-scrape' is to click on the Heroku demo link right above that leads it directly to the project without any installations required. This link can be found within this readme file or at the description area within https://github.com/duongsters/news-to-scrape
 
-### `npm test`
+To connect locally...
+1) Clone 'news-to-scrape' repository via https://github.com/duongsters/news-to-scrape
+2) Run command line Terminal (or via Gitbash) 'npm install' for required NPMs used within the application ('npm i express express-handlebars axios cheerio mongoose morgan')...or just download all NPMs from Technologies Used below.
+3) Run command line 'node server.js' to start up the application
+4) Once connected to http://localhost:8080/ from CLI, copy that exact link to URL
+5) Run 'ctrl + c' within the CLI to exit 'news-to-scrape' entirely
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Technologies Used:
+- HTML
+- CSS
+- Javascript
+- jQuery
+- Node.js
+- MongoDB
+- NPM: Express, Mongoose, Morgan, Express-Handlebars, Axios, Cheerio, Heroku
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Code Snippets:
+via server.js:
+* This code snippet shows the route for scraping all New Articles into application. Using axios, we grab the the body of hacker news' body of articles and searches and grabs every class named 'title' within an table data tag then places empty result object into 'result' variable and adds the News Hacker article title and save it's as properties of the result object. Evenutally, it will send a message to the user when the function is successfully ran to scrape Hacker News' articles
+```javascript
+app.get("/scrape", function (req, res) {
+    axios.get("https://news.ycombinator.com/").then(function (response) {
+        var $ = cheerio.load(response.data);
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+        $("td.title").each(function (i, element) {
+            var result = {};
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+            result.title = $(this)
+                .children("a")
+                .text();
+            result.link = $(this)
+                .children("a")
+                .attr("href");
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+            db.Article.create(result)
+                .then(function (dbArticle) {
+                    console.log(dbArticle);
+                })
+                .catch(function (err) {
+                    console.log(err);
+                });
+        });
+        res.send("Hacker News's articles Scrape Complete");
+    });
+});
+```
+via app.js:
+* The on-click events handlers from my app.js file shows how the 'news-to-scrape" works in saving the user's notes to the specific Hacker News article by use of using the ajax GET method in getting the user's customized notes while sotring it in the mongo db and ajax POST method fetching the data from the mongo db and posting it on 'news-to-scrape' webpage
+```javascript
+$(document).on("click", "p", function () {
+    $("#notes").empty();
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "GET",
+        url: "/articles/" + thisId
+    })
+        .then(function (data) {
+            console.log(data);
+            $("#notes").append("<h2>" + data.title + "</h2>");
+            $("#notes").append("<input id='titleinput' name='title' >");
+            $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+            $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Now</button>");
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+            if (data.note) {
+                $("#titleinput").val(data.note.title);
+                $("#bodyinput").val(data.note.body);
+            }
+        });
+});
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+$(document).on("click", "#savenote", function () {
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "POST",
+        url: "/articles/" + thisId,
+        data: {
+            title: $("#titleinput").val(),
+            body: $("#bodyinput").val()
+        }
+    })
+        .then(function (data) {
+            console.log(data);
+            $("#notes").empty();
+        });
+    $("#titleinput").val("");
+    $("#bodyinput").val("");
+});
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+## Author Links:
+- [GitHub](https://github.com/duongsters) ||
+ [LinkIn](https://www.linkedin.com/in/theandrewduong/) ||
+ [Portfolio](https://www.duongsters.github.io/updated-portfolio/)
