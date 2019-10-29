@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -19,4 +19,93 @@
 
 .App-link {
   color: #09d3ac;
+} */
+
+body {
+  background: url(/img/background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  
+}
+
+.App {
+  text-align: center;
+  font-family: monospace;  
+  overflow: hidden;
+  color: lightgrey;
+  background-color: rgba(0, 0, 0, 0.208);
+  height: 98vh;
+  
+
+}
+
+.gameboard-header {
+  height: 130px;
+  padding: 20px 20px 0 20px;
+}
+
+.gameboard-header h1 {
+  font-weight: 390;
+  font-size: 45px;
+}
+
+
+
+.Gameboard h3{
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.player-card{
+  height: 66vh;
+  padding: 21px 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.player:hover {
+  transition: transform .25s ease-in-out;
+  transform: scale(1.01,1.01);
+}
+
+.Footer {
+  position: fixed;
+  bottom: 0;
+  left: 30px;
+}
+
+.Footer a {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+.Footer h2 {
+  font-weight: 300;
+}
+
+@media screen and (max-width: 1350px) {
+  img.player-pic {
+    height: 140px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  img.player-pic {
+    height: 95px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .gameboard-header {
+    height: 89px;
+  }
+  
+  .gameboard-header h1 {
+    font-size: 29px;
+  }
+
+  .Gameboard h3 {
+    font-size: 15px;
+  }
 }

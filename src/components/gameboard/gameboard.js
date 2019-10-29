@@ -82,14 +82,16 @@ const nbaPlayers = [
 
 function shuffleCard(arrGameboard) {
     arrGameboard.map(i => {
-        Math.random()
+        // Math.random()
+        return [Math.random(), i];
+
     })
         .sort((i, j) => {
             return i[0] - j[0];
         })
 
         .map(i => {
-            return a[i];
+            return i[1];
         });
 }
 
@@ -112,9 +114,9 @@ export default class Gameboard extends Component {
                 //then the user repsonse to the clicked NBA player card is sets the boolean value of 'clicked' to true for the player/user
                 //and also shuffles the NBA Player cards
                 players: shuffleCard(this.state.players.map((player, current) => {
-                    return ((current === index) ? (
-                        { name, img, clicked } = { clicked: true }) : player)
-                }
+                    // return (current === index) ? (
+                    // { name, img, clicked } = { clicked: true }) : player)
+                    return (current === index) ? { ...player, clicked: true } : player}                
                 )
                 ),
                 user: {
@@ -152,7 +154,7 @@ export default class Gameboard extends Component {
                     score={this.state.user.score} />
 
                 <CardList
-                //renders the NBA player cards clicked by the player/user within the CardList DOM of the page
+                    //renders the NBA player cards clicked by the player/user within the CardList DOM of the page
                     players={this.state.players}
                     handleCardClick={this.handleCardClick} />
             </div>
