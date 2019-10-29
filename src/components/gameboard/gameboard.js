@@ -93,3 +93,13 @@ function shuffleCard(arrGameboard) {
     });
 }
 
+
+export default class Gameboard extends Component {
+
+    state = {
+        user: {
+            score: 0
+        },
+        players: shuffleCard(nbaPlayers)
+    };
+}
